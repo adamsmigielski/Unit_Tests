@@ -36,7 +36,7 @@
 
 #include <forward_list>
 
-#include <O8\Templates\Singleton.hpp>
+#include <Utilities\containers\Singleton.hpp>
 
 namespace O8
 {

@@ -34,7 +34,7 @@
 
 #ifdef UNIT_TESTS_ENABLE
 
-#include <O8\Templates\Singleton.hpp>
+#include <Utilities\containers\Singleton.hpp>
 
 #include "Enumerations.hpp"
 
