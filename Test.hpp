@@ -29,8 +29,8 @@
 * @file Test.hpp
 **/
 
-#ifndef O8_UNIT_TESTS_TEST_HPP
-#define O8_UNIT_TESTS_TEST_HPP
+#ifndef UNIT_TESTS_TEST_HPP
+#define UNIT_TESTS_TEST_HPP
 
 #ifdef UNIT_TESTS_ENABLE
 
@@ -38,37 +38,34 @@
 
 #include "Enumerations.hpp"
 
-namespace O8
+namespace UnitTests
 {
-    namespace UnitTests
+    class EnviromentBase : public Containers::Singleton<EnviromentBase>
     {
-        class EnviromentBase : public Templates::Containers::Singleton<EnviromentBase>
-        {
-        public:
-            EnviromentBase();
-            virtual ~EnviromentBase();
-        };
+    public:
+        EnviromentBase();
+        virtual ~EnviromentBase();
+    };
 
-        class Test
-        {
-        public:
-            Test(const char * name);
-            virtual ~Test();
+    class Test
+    {
+    public:
+        Test(const char * name);
+        virtual ~Test();
 
-            const char * Get_name() const;
+        const char * Get_name() const;
 
-            virtual void Assert(
-                const char * description,
-                const char * file,
-                unsigned int line);
-            virtual Result Run(EnviromentBase & env) = 0;
+        virtual void Assert(
+            const char * description,
+            const char * file,
+            unsigned int line);
+        virtual Result Run(EnviromentBase & env) = 0;
 
-        protected:
-            const char * m_name;
-        };
-    }
+    protected:
+        const char * m_name;
+    };
 }
 
 #endif /* UNIT_TESTS_ENABLE */
 
-#endif /* O8_UNIT_TESTS_TEST_HPP */
+#endif /* UNIT_TESTS_TEST_HPP */

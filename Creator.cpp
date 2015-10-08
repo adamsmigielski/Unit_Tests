@@ -31,57 +31,16 @@
 
 #ifdef UNIT_TESTS_ENABLE
 
-#include <O8\Templates\PointerContainer.hpp>
-
 #include "Creator.hpp"
-#include "ExecutorInterface.hpp"
-#include "Test.hpp"
+#include "CreatorRegister.hpp"
 
-namespace O8
+namespace UnitTests
 {
-    namespace UnitTests
+    TestCreatorBase::TestCreatorBase()
     {
-        TestCreatorBase::TestCreatorBase()
-        {
-            auto reg = TestCreatorRegister::Get_singleton();
+        auto reg = TestCreatorRegister::Get_singleton();
 
-            reg->Register(this);
-        }
-
-        TestCreatorRegister::TestCreatorRegister()
-        {
-
-        }
-
-        TestCreatorRegister::~TestCreatorRegister()
-        {
-
-        }
-
-        void TestCreatorRegister::Execute(ExecutorInterface & executor)
-        {
-            for (auto it = m_list.begin(), end = m_list.end();
-                it != end;
-                ++it)
-            {
-                auto test = (*it)->Create();
-
-                if (nullptr == test)
-                {
-                    continue;
-                }
-
-                executor.Run(test);
-
-                delete test;
-            }
-        }
-
-
-        void TestCreatorRegister::Register(TestCreatorBase * creator)
-        {
-            m_list.push_front(creator);
-        }
+        reg->Register(this);
     }
 }
 

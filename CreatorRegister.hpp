@@ -26,36 +26,37 @@
 
 /**
 * @author Adam Œmigielski
-* @file Executor.hpp
+* @file Creator.hpp
 **/
 
-#ifndef UNIT_TESTS_EXECUTOR_HPP
-#define UNIT_TESTS_EXECUTOR_HPP
+#ifndef UNIT_TESTS_CREATOR_REGISTER_HPP
+#define UNIT_TESTS_CREATOR_REGISTER_HPP
 
 #ifdef UNIT_TESTS_ENABLE
 
-#include "ExecutorInterface.hpp"
+#include <forward_list>
 
+#include <Utilities\containers\Singleton.hpp>
 
 namespace UnitTests
 {
-    class Executor : public ExecutorInterface
+    class ExecutorInterface;
+	class TestCreatorBase;
+
+    class TestCreatorRegister : public Containers::Singleton<TestCreatorRegister>
     {
     public:
-        Executor();
-        ~Executor();
+        TestCreatorRegister();
+        ~TestCreatorRegister();
 
-        virtual Result Get_result() const;
-		virtual const ResultsMap & Get_results_map() const;
-
-        virtual void Run(Test * test);
+        void Execute(ExecutorInterface & executor, const char * filter);
+        void Register(TestCreatorBase * creator);
 
     private:
-		ExecutorInterface::ResultsMap m_results;
-        Result m_result;
+        std::forward_list<TestCreatorBase *> m_list;
     };
 }
 
 #endif /* UNIT_TESTS_ENABLE */
 
-#endif /* UNIT_TESTS_EXECUTOR_HPP */
+#endif /* UNIT_TESTS_CREATOR_REGISTER_HPP */

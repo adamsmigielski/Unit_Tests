@@ -26,47 +26,77 @@
 
 /**
 * @author Adam Œmigielski
-* @file Test.cpp
+* @file Creator.cpp
 **/
 
 #ifdef UNIT_TESTS_ENABLE
 
+#include <Utilities\containers\PointerContainer.hpp>
+
+#include "Creator.hpp"
+#include "CreatorRegister.hpp"
+#include "ExecutorInterface.hpp"
 #include "Test.hpp"
+
+#include <memory>
 
 namespace UnitTests
 {
-    EnviromentBase::EnviromentBase()
+    TestCreatorRegister::TestCreatorRegister()
     {
 
     }
 
-    EnviromentBase::~EnviromentBase()
+    TestCreatorRegister::~TestCreatorRegister()
     {
 
     }
 
-    Test::Test(const char * name)
-        : m_name(name)
+    void TestCreatorRegister::Execute(ExecutorInterface & executor, const char * filter)
     {
+        if (0 == strcmp(filter, "*"))
+        {
+            for (auto it = m_list.begin(), end = m_list.end();
+                it != end;
+                ++it)
+            {
+                std::unique_ptr<Test> test((*it)->Create());
 
+                if (nullptr == test)
+                {
+                    continue;
+                }
+
+                executor.Run(test.get());
+            }
+        }
+        else
+        {
+            for (auto it = m_list.begin(), end = m_list.end();
+                it != end;
+                ++it)
+            {
+                std::unique_ptr<Test> test((*it)->Create());
+
+                if (nullptr == test)
+                {
+                    continue;
+                }
+
+                if ( 0 != strcmp( filter, test->Get_name() ) )
+                {
+                    continue;
+                }
+
+                executor.Run(test.get());
+            }
+        }
     }
 
-    Test::~Test()
-    {
-        m_name = nullptr;
-    }
 
-    void Test::Assert(
-        const char * description,
-        const char * file,
-        unsigned int line)
+    void TestCreatorRegister::Register(TestCreatorBase * creator)
     {
-
-    }
-
-    const char * Test::Get_name() const
-    {
-        return m_name;
+        m_list.push_front(creator);
     }
 }
 

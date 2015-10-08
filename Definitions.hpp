@@ -29,45 +29,42 @@
 * @file Definitions.hpp
 **/
 
-#ifndef O8_UNIT_TESTS_DEFINTIONS_HPP
-#define O8_UNIT_TESTS_DEFINTIONS_HPP
+#ifndef UNIT_TESTS_DEFINTIONS_HPP
+#define UNIT_TESTS_DEFINTIONS_HPP
 
 #ifdef UNIT_TESTS_ENABLE
 
 #define TEST_ASSERT(C, D) if (0 == C) { this->Assert(D, __FILE__, __LINE__); }
 
-#define UNIT_TEST(NAME) namespace O8                                           \
+#define UNIT_TEST(NAME) namespace UnitTests                                    \
 {                                                                              \
-    namespace UnitTests                                                        \
+    class Unit_test_ ## NAME : public ::UnitTests::Test                        \
     {                                                                          \
-        class Unit_test_ ## NAME : public UnitTests::Test                      \
+    public:                                                                    \
+        Unit_test_ ## NAME()                                                   \
+            : Test(#NAME)                                                      \
         {                                                                      \
-        public:                                                                \
-            Unit_test_ ## NAME()                                               \
-                : Test(#NAME)                                                  \
-            {                                                                  \
                                                                                \
-            }                                                                  \
+        }                                                                      \
                                                                                \
-            virtual ~Unit_test_ ## NAME()                                      \
-            {                                                                  \
+        virtual ~Unit_test_ ## NAME()                                          \
+        {                                                                      \
                                                                                \
-            }                                                                  \
+        }                                                                      \
                                                                                \
-            virtual Result Run(EnviromentBase & env);                          \
-        };                                                                     \
+        virtual Result Run(EnviromentBase & env);                              \
+    };                                                                         \
                                                                                \
-       TestCreator<Unit_test_ ## NAME> g_ ## NAME ## _creator;                 \
-    }                                                                          \
+   TestCreator<Unit_test_ ## NAME> g_ ## NAME ## _creator;                     \
 }                                                                              \
                                                                                \
-O8::UnitTests::Result O8::UnitTests::Unit_test_ ## NAME::Run(O8::UnitTests::EnviromentBase & env)
+UnitTests::Result UnitTests::Unit_test_ ## NAME::Run(UnitTests::EnviromentBase & env)
 
 #else /* UNIT_TESTS_ENABLE */
 
 #define TEST_ASSERT(C, D) 0
 
-#define UNIT_TEST(NAME) O8::UnitTests::Result O8::UnitTests::Unit_test_ ## NAME ## _disabled()
+#define UNIT_TEST(NAME) UnitTests::Result UnitTests::Unit_test_ ## NAME ## _disabled()
 
 #endif /* UNIT_TESTS_ENABLE */
 

@@ -32,25 +32,68 @@
 #ifdef UNIT_TESTS_ENABLE
 
 #include "UnitTests.hpp"
+#include "CreatorRegister.hpp"
 #include "Executor.hpp"
 
-namespace O8
+#include <Platform\Platform.hpp>
+#include <Utilities\basic\Assert.hpp>
+#include <Utilities\basic\BreakToDebug.hpp>
+
+#include <iostream>
+#include <iomanip>
+
+namespace UnitTests
 {
-    namespace UnitTests
+    const static size_t s_index_length = 8;
+    const static size_t s_result_length = 6;
+    const static char * s_separator = " | ";
+
+    Result Execute_tests(ExecutorInterface & executor, const char * filter)
     {
-        Result Execute_tests(ExecutorInterface & executor)
+        /* Execute tests */
+        auto reg = TestCreatorRegister::Get_singleton();
+        reg->Execute(executor, filter);
+
+        /* Log results */
+        auto results = executor.Get_results_map();
+        Platform::uint32 lp = 0;
+
+        std::clog << std::setw(s_index_length) << "Index" << s_separator;
+        std::clog << std::setw(s_result_length) << "Result" << s_separator;
+        std::clog << "Name" << std::endl;
+
+        for (ExecutorInterface::ResultsMap::const_iterator it = results.begin(), end = results.end();
+            end != it;
+            ++it, ++lp)
         {
-            auto reg = UnitTests::TestCreatorRegister::Get_singleton();
-            reg->Execute(executor);
-            return executor.Get_result();
+            std::clog << std::setw(s_index_length) << lp << s_separator;
+
+            std::clog << std::setw(s_result_length);
+            
+            switch (it->second.m_result)
+            {
+            case Passed:       std::clog << "Pass" << s_separator; break;
+            case Failed:       std::clog << "FAILED" << s_separator; break;
+            case NotAvailable: std::clog << "Skip" << s_separator; break;
+            case RESULT_MAX:
+            default:
+                std::clog << std::endl << std::endl << "Something went terribly wrong. See:" << __FILE__ << "@" << __LINE__ << std::endl << std::endl;
+                ASSERT(0);
+                break;
+            }
+
+            std::clog << it->first << std::endl;
         }
 
-        Result Execute_tests()
-        {
-            UnitTests::Executor exec;
+        /* Done */
+        return executor.Get_result();
+    }
 
-            return Execute_tests(exec);
-        }
+    Result Execute_tests(const char * filter)
+    {
+        UnitTests::Executor exec;
+
+        return Execute_tests(exec, filter);
     }
 }
 

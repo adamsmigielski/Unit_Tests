@@ -3,6 +3,8 @@ PROJECT ( Unit_Tests )
 ADD_LIBRARY (Unit_Tests STATIC
 			 Creator.cpp
 			 Creator.hpp
+			 CreatorRegister.cpp
+			 CreatorRegister.hpp
 			 Definitions.hpp
 			 Enumerations.hpp
 			 Executor.cpp

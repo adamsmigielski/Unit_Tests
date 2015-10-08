@@ -29,55 +29,35 @@
 * @file Creator.hpp
 **/
 
-#ifndef O8_UNIT_TESTS_CREATOR_HPP
-#define O8_UNIT_TESTS_CREATOR_HPP
+#ifndef UNIT_TESTS_CREATOR_HPP
+#define UNIT_TESTS_CREATOR_HPP
 
 #ifdef UNIT_TESTS_ENABLE
 
-#include <forward_list>
-
-#include <Utilities\containers\Singleton.hpp>
-
-namespace O8
+namespace UnitTests
 {
-    namespace UnitTests
+    class ExecutorInterface;
+    class Test;
+
+    class TestCreatorBase
     {
-        class ExecutorInterface;
-        class Test;
+    public:
+        TestCreatorBase();
 
-        class TestCreatorBase
+        virtual Test * Create() = 0;
+    };
+
+    template <class T>
+    class TestCreator : public TestCreatorBase
+    {
+    public:
+        virtual Test * Create()
         {
-        public:
-            TestCreatorBase();
-
-            virtual Test * Create() = 0;
-        };
-
-        template <class T>
-        class TestCreator : public TestCreatorBase
-        {
-        public:
-            virtual Test * Create()
-            {
-                return new T;
-            }
-        };
-
-        class TestCreatorRegister : public Templates::Containers::Singleton<TestCreatorRegister>
-        {
-        public:
-            TestCreatorRegister();
-            ~TestCreatorRegister();
-
-            void Execute(ExecutorInterface & executor);
-            void Register(TestCreatorBase * creator);
-
-        private:
-            std::forward_list<TestCreatorBase *> m_list;
-        };
-    }
+            return new T;
+        }
+    };
 }
 
 #endif /* UNIT_TESTS_ENABLE */
 
-#endif /* O8_UNIT_TESTS_CREATOR_HPP */
+#endif /* UNIT_TESTS_CREATOR_HPP */

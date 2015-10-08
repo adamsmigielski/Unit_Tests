@@ -29,32 +29,45 @@
 * @file ExecutorInterface.hpp
 **/
 
-#ifndef O8_UNIT_TESTS_EXECUTOR_INTERFACE_HPP
-#define O8_UNIT_TESTS_EXECUTOR_INTERFACE_HPP
+#ifndef UNIT_TESTS_EXECUTOR_INTERFACE_HPP
+#define UNIT_TESTS_EXECUTOR_INTERFACE_HPP
 
 #ifdef UNIT_TESTS_ENABLE
 
 #include "Enumerations.hpp"
 
-namespace O8
+#include <map>
+#include <string>
+
+namespace UnitTests
 {
-    namespace UnitTests
+    class Test;
+
+    class ExecutorInterface
     {
-        class Test;
+	public:
+		struct DetailedResult
+		{
+			Result m_result;
+			std::string m_log;
+		};
 
-        class ExecutorInterface
-        {
-        public:
-            ExecutorInterface();
-            virtual ~ExecutorInterface();
+		typedef std::map<std::string, DetailedResult> ResultsMap;
 
-            virtual Result Get_result() const = 0;
-            virtual void Run(Test * test) = 0;
-        };
-    }
+        ExecutorInterface();
+        virtual ~ExecutorInterface();
+
+        virtual Result Get_result() const = 0;
+		virtual const ResultsMap & Get_results_map() const = 0;
+
+		virtual void Run(Test * test) = 0;
+	};
+
+    Result Execute_tests(ExecutorInterface & executor, const char * filter);
+	Result Execute_tests(const char * filter);
 }
 
 #endif /* UNIT_TESTS_ENABLE */
 
-#endif /* O8_UNIT_TESTS_EXECUTOR_INTERFACE_HPP */
+#endif /* UNIT_TESTS_EXECUTOR_INTERFACE_HPP */
 

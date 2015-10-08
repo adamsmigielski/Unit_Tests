@@ -29,9 +29,55 @@
 * @file main.cpp
 **/
 
-#include <O8\Unit_Tests\UnitTests.hpp>
+#include <Unit_Tests\UnitTests.hpp>
+#include <Unit_Tests\ExecutorInterface.hpp>
+
+#include <fstream>
+#include <iostream>
+#include <cstdio>
+#include <string>
+
 
 int main(int argc, char * argv[])
 {
-    O8::UnitTests::Execute_tests();
+    std::string file_name = "test_log.txt";
+    std::string test_name = "*";
+
+    for (int i = 1; i < argc; ++i)
+    {
+        std::string buf;
+        buf.resize(strlen(argv[i]));
+
+        if (1 == sscanf(argv[i], "log=%s", buf.data()))
+        {
+            file_name = buf;
+        }
+        else if (1 == sscanf(argv[i], "test=%s", buf.data()))
+        {
+            test_name = buf;
+        }
+    }
+
+    std::fstream file;
+    file.open(file_name.c_str(), std::fstream::out);
+    if (false == file.is_open())
+    {
+        return -1;
+    }
+
+    auto buf = std::clog.rdbuf(file.rdbuf());
+
+    auto result = UnitTests::Execute_tests(test_name.c_str());
+
+    std::clog.rdbuf(buf);
+
+    switch (result)
+    {
+    case UnitTests::Passed: return 0; break;
+    case UnitTests::NotAvailable: return 0; break;
+    case UnitTests::Failed: return -1024; break;
+    default:
+        return -1;
+        break;
+    }
 }

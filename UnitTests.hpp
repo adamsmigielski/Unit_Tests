@@ -29,8 +29,8 @@
 * @file UnitTests.hpp
 **/
 
-#ifndef O8_UNIT_TESTS_UNIT_TESTS_HPP
-#define O8_UNIT_TESTS_UNIT_TESTS_HPP
+#ifndef UNIT_TESTS_UNIT_TESTS_HPP
+#define UNIT_TESTS_UNIT_TESTS_HPP
 
 #include "Definitions.hpp"
 
@@ -38,18 +38,8 @@
 
 #include "Creator.hpp"
 #include "Enumerations.hpp"
-#include "ExecutorInterface.hpp"
 #include "Test.hpp"
-
-namespace O8
-{
-    namespace UnitTests
-    {
-        Result Execute_tests(ExecutorInterface & executor);
-        Result Execute_tests();
-    }
-}
 
 #endif /* UNIT_TESTS_ENABLE */
 
-#endif /* O8_UNIT_TESTS_UNIT_TESTS_HPP */
+#endif /* UNIT_TESTS_UNIT_TESTS_HPP */

@@ -35,59 +35,71 @@
 #include "Executor.hpp"
 #include "Test.hpp"
 
-namespace O8
+#include <iostream>
+#include <sstream>
+
+namespace UnitTests
 {
-    namespace UnitTests
+    Executor::Executor()
+        : m_result(NotAvailable)
     {
-        Executor::Executor()
-            : m_result(NotAvailable)
+
+    }
+
+    Executor::~Executor()
+    {
+
+    }
+
+    Result Executor::Get_result() const
+    {
+        return m_result;
+    }
+
+	const ExecutorInterface::ResultsMap & Executor::Get_results_map() const
+	{
+		return m_results;
+	}
+
+    void Executor::Run(Test * test)
+    {
+        static Result result_lut[RESULT_MAX][RESULT_MAX] =
         {
-
-        }
-
-        Executor::~Executor()
-        {
-
-        }
-
-        Result Executor::Get_result() const
-        {
-            return m_result;
-        }
-
-        void Executor::Run(Test * test)
-        {
-            static Result result_lut[RESULT_MAX][RESULT_MAX] =
+            /* m_result = Passed */
             {
-                /* m_result = Passed */
-                {
-                    Passed,
-                    Failed,
-                    Passed
-                },
-                /* m_result = Failed */
-                {
-                    Failed,
-                    Failed,
-                    Failed
-                },
-                /* m_result = NotAvailable */
-                {
-                    Passed,
-                    Failed,
-                    NotAvailable
-                }
-            };
+                Passed,
+                Failed,
+                Passed
+            },
+            /* m_result = Failed */
+            {
+                Failed,
+                Failed,
+                Failed
+            },
+            /* m_result = NotAvailable */
+            {
+                Passed,
+                Failed,
+                NotAvailable
+            }
+        };
 
-            auto env = EnviromentBase::Get_singleton();
-            auto name = test->Get_name();
-            auto result = NotAvailable;
+        auto env = EnviromentBase::Get_singleton();
+        auto name = test->Get_name();
+        auto result = NotAvailable;
 
-            result = test->Run(*env);
+		DetailedResult & detailed = m_results[name];
+        std::stringstream stream;
 
-            m_result = result_lut[m_result][result];
-            m_results.emplace(name, result);
-        }
+        auto buf = std::clog.rdbuf(stream.rdbuf());
+        result = test->Run(*env);
+        std::clog.rdbuf(buf);
+
+        detailed.m_result = result;
+        detailed.m_log = stream.str();
+
+        m_result = result_lut[m_result][result];
     }
 }
 

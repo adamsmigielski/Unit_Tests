@@ -33,17 +33,15 @@
 
 #include "ExecutorInterface.hpp"
 
-namespace O8
+namespace UnitTests
 {
-    namespace UnitTests
+    ExecutorInterface::ExecutorInterface()
     {
-        ExecutorInterface::ExecutorInterface()
-        {
-        }
+    }
 
-        ExecutorInterface::~ExecutorInterface()
-        {
-        }
+    ExecutorInterface::~ExecutorInterface()
+    {
     }
 }
+
 #endif /* UNIT_TESTS_ENABLE */

@@ -29,27 +29,24 @@
 * @file Enumerations.hpp
 **/
 
-#ifndef O8_UNIT_TESTS_ENUMERATIONS_HPP
-#define O8_UNIT_TESTS_ENUMERATIONS_HPP
+#ifndef UNIT_TESTS_ENUMERATIONS_HPP
+#define UNIT_TESTS_ENUMERATIONS_HPP
 
 #ifdef UNIT_TESTS_ENABLE
 
-namespace O8
+namespace UnitTests
 {
-    namespace UnitTests
+    enum Result
     {
-        enum Result
-        {
-            Passed = 0,
-            Failed,
-            NotAvailable,
+        Passed = 0,
+        Failed,
+        NotAvailable,
 
-            /* */
-            RESULT_MAX
-        };
-    }
+        /* */
+        RESULT_MAX
+    };
 }
 
 #endif /* UNIT_TESTS_ENABLE */
 
-#endif /* O8_UNIT_TESTS_TEST_HPP */
+#endif /* UNIT_TESTS_TEST_HPP */
