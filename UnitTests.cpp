@@ -58,6 +58,8 @@ namespace UnitTests
         auto results = executor.Get_results_map();
         Platform::uint32 lp = 0;
 
+        std::clog << "Results" << std::endl;
+
         std::clog << std::setw(s_index_length) << "Index" << s_separator;
         std::clog << std::setw(s_result_length) << "Result" << s_separator;
         std::clog << "Name" << std::endl;
@@ -83,6 +85,15 @@ namespace UnitTests
             }
 
             std::clog << it->first << std::endl;
+        }
+
+        for (auto it : results)
+        {
+            std::clog << std::endl << "/* *** Log for test: "
+                << it.first << " *** */" << std::endl
+                << it.second.m_log << std::endl
+                << "/* *** End for test: "
+                << it.first << " *** */" << std::endl;
         }
 
         /* Done */
