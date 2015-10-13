@@ -31,6 +31,7 @@
 
 #ifdef UNIT_TESTS_ENABLE
 
+#include <Platform\Platform.hpp>
 #include <Utilities\containers\PointerContainer.hpp>
 
 #include "Creator.hpp"

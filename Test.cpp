@@ -33,6 +33,9 @@
 
 #include "Test.hpp"
 
+#include <exception>
+#include <iostream>
+
 namespace UnitTests
 {
     EnviromentBase::EnviromentBase()
@@ -54,14 +57,6 @@ namespace UnitTests
     Test::~Test()
     {
         m_name = nullptr;
-    }
-
-    void Test::Assert(
-        const char * description,
-        const char * file,
-        unsigned int line)
-    {
-
     }
 
     const char * Test::Get_name() const

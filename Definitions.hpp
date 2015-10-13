@@ -34,7 +34,57 @@
 
 #ifdef UNIT_TESTS_ENABLE
 
-#define TEST_ASSERT(C, D) if (0 == C) { this->Assert(D, __FILE__, __LINE__); }
+#include <iostream>
+
+#define TEST_ASSERT(A, B) {     \
+    auto a = (A);               \
+    auto b = (B);               \
+                                \
+    if (a != b)                 \
+    {                           \
+        std::clog               \
+            << "ASSERTION! "    \
+            << __FILE__         \
+            << "@"              \
+            << __LINE__         \
+            << ". Expected: "   \
+            << #A               \
+            << " == "           \
+            << #B               \
+            << ". L: "          \
+            << a                \
+            << ". R: "          \
+            << b                \
+            << "."              \
+            << std::endl;       \
+        return Failed;          \
+    }                           \
+}
+
+#define TEST_ASSERT_NOT_EQUAL(A, B) { \
+    auto a = (A);                     \
+    auto b = (B);                     \
+                                      \
+    if (a == b)                       \
+    {                                 \
+        std::clog                     \
+            << "ASSERTION! "          \
+            << __FILE__               \
+            << "@"                    \
+            << __LINE__               \
+            << ". Expected: "         \
+            << #A                     \
+            << " != "                 \
+            << #B                     \
+            << ". L: "                \
+            << a                      \
+            << ". R: "                \
+            << b                      \
+            << "."                    \
+            << std::endl;             \
+        return Failed;                \
+    }                                 \
+}
 
 #define UNIT_TEST(NAME) namespace UnitTests                                    \
 {                                                                              \
@@ -62,7 +112,7 @@ UnitTests::Result UnitTests::Unit_test_ ## NAME::Run(UnitTests::EnviromentBase &
 
 #else /* UNIT_TESTS_ENABLE */
 
-#define TEST_ASSERT(C, D) 0
+#define TEST_ASSERT(A, B) 0
 
 #define UNIT_TEST(NAME) UnitTests::Result UnitTests::Unit_test_ ## NAME ## _disabled()
 

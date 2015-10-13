@@ -55,10 +55,6 @@ namespace UnitTests
 
         const char * Get_name() const;
 
-        virtual void Assert(
-            const char * description,
-            const char * file,
-            unsigned int line);
         virtual Result Run(EnviromentBase & env) = 0;
 
     protected:
